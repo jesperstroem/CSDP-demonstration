@@ -1,8 +1,7 @@
 import torch
-import pytorch_lightning as pl
-from pytorch_lightning.callbacks import LearningRateMonitor
-from pytorch_lightning.callbacks import RichProgressBar
-from pytorch_lightning.callbacks import ModelCheckpoint, Timer
+import lightning.pytorch as pl
+from lightning.pytorch.callbacks import LearningRateMonitor
+from lightning.pytorch.callbacks import ModelCheckpoint, Timer
 from lightning.pytorch.loggers.neptune import NeptuneLogger
 from csdp_pipeline.factories.dataloader_factory import USleep_Dataloader_Factory, LSeqSleepNet_Dataloader_Factory
 from csdp_training.lightning_models.factories.lightning_model_factory import USleep_Factory, LSeqSleepNet_Factory
@@ -26,7 +25,8 @@ test_sets = data["test_sets"]
 pretrained = data["pretrained"]
 pretrained_path = data["pretrained_path"]
 
-test = True
+test_only = data["test_only"]
+test_after_train = data["test_after_train"]
 
 gradient_steps = data["gradient_steps"]
 batch_size = data["batch_size"]
@@ -86,14 +86,12 @@ def main():
     )
     
     lr_monitor = LearningRateMonitor(logging_interval='epoch')
-    richbar = RichProgressBar()
     checkpoint_callback = ModelCheckpoint(monitor="valKap", mode="max")
     timer = Timer()
 
     callbacks = [early_stopping,
                  timer,
                  lr_monitor,
-                 richbar,
                  checkpoint_callback]
     
     # I hate this, but Lightning has no better way to change logging directory :(
@@ -140,17 +138,23 @@ def main():
                          devices=1,
                          num_nodes=1)
     
-    if test == True:
+    if test_only == True:
         with torch.no_grad():
             net.eval()
 
-            test_loader = fac.create_testing_loader(num_workers=1)
+            test_loader = fac.create_testing_loader(num_workers=num_workers)
             _ = trainer.test(net, test_loader)
     else:
         train_loader = fac.create_training_loader(num_workers=num_workers)
         val_loader = fac.create_validation_loader(num_workers=num_workers)
 
         trainer.fit(net, train_loader, val_loader)
+
+        if test_after_train == True:
+            with torch.no_grad():
+                net.eval()
+                test_loader = fac.create_testing_loader(num_workers=num_workers)
+                _ = trainer.test(net, test_loader, ckpt_path="best")
 
     os.chdir(org)
 
