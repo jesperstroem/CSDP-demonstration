@@ -1,11 +1,22 @@
 # CSDP Demonstration
 
-TODO
+This repository contains a demonstration of the Common Sleep Data Pipeline found at https://github.com/jesperstroem/CSDP.
+
+## Installation requirements
+
+To run the demonstration, you need to have Python, Pip and Git installed on your system
+
+Then run the following commands:
+
+git clone https://github.com/jesperstroem/CSDP-demonstration
+pip install git+https://github.com/jesperstroem/CSDP.git
+pip install lightning
+pip install neptune
 
 ## Setup parameters
 
-TODO
+Edit the "training_args" yaml file to your desired setup.
 
-## Run demonstration
+## Run the demonstration
 
-TODO
+Run "python run_training.py"
