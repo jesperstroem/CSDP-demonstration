@@ -8,10 +8,12 @@ To run the demonstration, you need to have Python, Pip and Git installed on your
 
 Then run the following commands:
 
+```console
 git clone https://github.com/jesperstroem/CSDP-demonstration
 pip install git+https://github.com/jesperstroem/CSDP.git
 pip install lightning
 pip install neptune
+```
 
 ## Setup parameters
 
