@@ -1,2 +1,6 @@
 *.out
 *.sh
+*.ckpt
+lightning_logs/
+*.json
+results/

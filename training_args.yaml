@@ -1,9 +1,10 @@
 # Model can be "usleep" or "lseqsleepnet"
-model: "usleep"
+model: "lseqsleepnet"
 
 hdf5_base_path: ""
 
-hdf5_split_path: ""
+hdf5_split_path: null
+create_random_split: True
 
 accelerator: "gpu"
 
@@ -27,7 +28,7 @@ usleep_parameters:
   progression_factor: 2
 
 lseq_parameters:
-  coming_soon: 0
+  epoch_window_size: 200
 
 test_after_train: True
 test_only: False

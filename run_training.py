@@ -43,6 +43,7 @@ neptune_name = neptune_info["name"]
 
 hdf5_data_path = data["hdf5_base_path"]
 hdf5_split_path = data["hdf5_split_path"]
+create_random_split = data["create_random_split"]
 accelerator = data["accelerator"]
 
 def main():
@@ -57,7 +58,8 @@ def main():
                                         trainsets=train_sets,
                                         valsets=val_sets,
                                         testsets=test_sets,
-                                        data_split_path=hdf5_split_path)
+                                        data_split_path=hdf5_split_path,
+                                        create_random_split=create_random_split)
         
         mfac = USleep_Factory(lr = lr,
                               batch_size = batch_size,
@@ -66,8 +68,19 @@ def main():
                               progression_factor=parameters["progression_factor"])
         
     elif model_type == "lseqsleepnet":
-        fac = LSeqSleepNet_Dataloader_Factory()
-        mfac = LSeqSleepNet_Factory()
+        parameters = data["lseq_parameters"]
+
+        fac = LSeqSleepNet_Dataloader_Factory(gradient_steps=gradient_steps,
+                                              batch_size=batch_size,
+                                              num_epochs=parameters["epoch_window_size"],
+                                              hdf5_base_path=hdf5_data_path,
+                                              trainsets=train_sets,
+                                              valsets=val_sets,
+                                              testsets=test_sets,
+                                              data_split_path=hdf5_split_path,
+                                              create_random_split=create_random_split)
+        mfac = LSeqSleepNet_Factory(lr,
+                                    batch_size)
     else:
         print("No valid model configuration")
         exit()
