@@ -1,8 +1,8 @@
 import torch
-import lightning.pytorch as pl
-from lightning.pytorch.callbacks import LearningRateMonitor
-from lightning.pytorch.callbacks import ModelCheckpoint, Timer
-from lightning.pytorch.loggers.neptune import NeptuneLogger
+import pytorch_lightning as pl
+from pytorch_lightning.callbacks import LearningRateMonitor
+from pytorch_lightning.callbacks import ModelCheckpoint, Timer
+from pytorch_lightning.loggers.neptune import NeptuneLogger
 from csdp_pipeline.factories.dataloader_factory import USleep_Dataloader_Factory, LSeqSleepNet_Dataloader_Factory
 from csdp_training.lightning_models.factories.lightning_model_factory import USleep_Factory, LSeqSleepNet_Factory
 from pathlib import Path
@@ -36,7 +36,7 @@ lr = data["lr"]
 max_epochs = data["max_epochs"]
 early_stop_patience = data["early_stop_patience"]
 
-logging_enabled = neptune_info["logging"]
+logging_enabled = neptune_info["use"]
 neptune_api_key = neptune_info["api_key"]
 neptune_project = neptune_info["project"]
 neptune_name = neptune_info["name"]

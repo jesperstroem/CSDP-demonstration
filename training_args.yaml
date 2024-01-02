@@ -37,7 +37,7 @@ pretrained: False
 pretrained_path: ""
 
 neptune:
-  logging: False
+  use: False
   existing_run_id: null
   logging_folder: null
   api_key: ""
