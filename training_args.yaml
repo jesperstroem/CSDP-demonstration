@@ -22,6 +22,10 @@ lr: 0.0001
 max_epochs: 2
 early_stop_patience: 50
 
+lr_sched_patience: 50
+lr_sched_factor: 0.5
+lr_sched_minimum: 0.0000001
+
 usleep_parameters:
   initial_filters: 5
   complexity_factor: 1.67

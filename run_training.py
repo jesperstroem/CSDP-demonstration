@@ -36,6 +36,10 @@ lr = data["lr"]
 max_epochs = data["max_epochs"]
 early_stop_patience = data["early_stop_patience"]
 
+lr_sched_patience = data["lr_sched_patience"]
+lr_sched_factor = data["lr_sched_factor"]
+lr_sched_minimum = data["lr_sched_minimum"]
+
 logging_enabled = neptune_info["use"]
 neptune_api_key = neptune_info["api_key"]
 neptune_project = neptune_info["project"]
@@ -65,7 +69,10 @@ def main():
                               batch_size = batch_size,
                               initial_filters=parameters["initial_filters"],
                               complexity_factor=parameters["complexity_factor"],
-                              progression_factor=parameters["progression_factor"])
+                              progression_factor=parameters["progression_factor"],
+                              lr_patience=lr_sched_patience,
+                              lr_factor=lr_sched_factor,
+                              lr_minimum=lr_sched_minimum)
         
     elif model_type == "lseqsleepnet":
         parameters = data["lseq_parameters"]
@@ -80,7 +87,10 @@ def main():
                                               data_split_path=hdf5_split_path,
                                               create_random_split=create_random_split)
         mfac = LSeqSleepNet_Factory(lr,
-                                    batch_size)
+                                    batch_size,
+                                    lr_patience=lr_sched_patience,
+                                    lr_factor=lr_sched_factor,
+                                    lr_minimum=lr_sched_minimum)
     else:
         print("No valid model configuration")
         exit()
